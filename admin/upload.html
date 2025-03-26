@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>HRM Journal - কন্টেন্ট আপলোড</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .upload-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .upload-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2C3E50;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-group textarea {
+            min-height: 150px;
+        }
+        .upload-btn {
+            width: 100%;
+            padding: 12px;
+            background: #27AE60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .success {
+            color: #27AE60;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container admin-nav">
+            <h1>কন্টেন্ট আপলোড</h1>
+            <ul>
+                <li><a href="dashboard.html">ড্যাশবোর্ড</a></li>
+                <li><a href="upload.html">নতুন কন্টেন্ট</a></li>
+                <li><a href="../index.html">সাইটে ফিরে যান</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="upload-container">
+        <h2 id="uploadTitle">নতুন জার্নাল আপলোড</h2>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="title">শিরোনাম</label>
+                <input type="text" id="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">বিবরণ</label>
+                <textarea id="description" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="author">লেখক</label>
+                <input type="text" id="author" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="date">প্রকাশের তারিখ</label>
+                <input type="date" id="date" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cover">কভার ইমেজ</label>
+                <input type="file" id="cover" accept="image/*">
+            </div>
+            
+            <div class="form-group" id="pdfUploadGroup">
+                <label for="pdfFile">PDF ফাইল</label>
+                <input type="file" id="pdfFile" accept=".pdf">
+            </div>
+            
+            <div class="form-group" id="contentGroup" style="display: none;">
+                <label for="content">নিবন্ধের বিষয়বস্তু</label>
+                <textarea id="content"></textarea>
+            </div>
+            
+            <button type="submit" class="upload-btn">প্রকাশ করুন</button>
+            <div id="successMsg" class="success"></div>
+        </form>
+    </section>
+
+    <script>
+        // URL প্যারামিটার চেক করে ফর্ম সেটআপ
+        const urlParams = new URLSearchParams(window.location.search);
+        const contentType = urlParams.get('type');
+        
+        if(contentType === 'article') {
+            document.getElementById('uploadTitle').textContent = 'নতুন নিবন্ধ আপলোড';
+            document.getElementById('pdfUploadGroup').style.display = 'none';
+            document.getElementById('contentGroup').style.display = 'block';
+        }
+        
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // এখানে AJAX রিকুয়েস্ট বা ডাটাবেস সংযোগ করা যাবে
+            // উদাহরণ স্বরূপ:
+            const formData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                author: document.getElementById('author').value,
+                date: document.getElementById('date').value,
+                type: contentType || 'journal'
+            };
+            
+            console.log('আপলোড করা ডাটা:', formData);
+            
+            document.getElementById('successMsg').textContent = 
+                contentType === 'article' ? 
+                'নিবন্ধ সফলভাবে প্রকাশিত হয়েছে!' : 
+                'জার্নাল সফলভাবে প্রকাশিত হয়েছে!';
+            
+            // ফর্ম রিসেট
+            this.reset();
+            
+            // 3 সেকেন্ড পর মেসেজ হাইড
+            setTimeout(() => {
+                document.getElementById('successMsg').textContent = '';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
